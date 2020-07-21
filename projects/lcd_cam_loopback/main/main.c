@@ -136,7 +136,7 @@ static void cam_task(void *arg)
     }
 
     ESP_LOGI(TAG, "camera init done\n");
-    vTaskDelay(100 / portTICK_RATE_MS);
+    vTaskDelay(1000 / portTICK_RATE_MS); // need delay for stable
     cam_start();
     while (1) {
         uint8_t *cam_buf = NULL;

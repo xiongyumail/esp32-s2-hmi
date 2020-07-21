@@ -95,7 +95,6 @@ static void cam_config(cam_config_t *config)
     periph_module_enable(PERIPH_I2S0_MODULE);
 
     // 配置时钟
-    I2S0.clkm_conf.val = 0;
     I2S0.clkm_conf.clkm_div_num = 2;
     I2S0.clkm_conf.clkm_div_b = 0;
     I2S0.clkm_conf.clkm_div_a = 0;
@@ -103,27 +102,25 @@ static void cam_config(cam_config_t *config)
     I2S0.clkm_conf.clk_en = 1;
 
     // 配置采样率
-    I2S0.sample_rate_conf.val = 0;
-    I2S0.sample_rate_conf.tx_bck_div_num = 2;
-    I2S0.sample_rate_conf.tx_bits_mod = 8;
     I2S0.sample_rate_conf.rx_bck_div_num = 1;
     I2S0.sample_rate_conf.rx_bits_mod = config->bit_width;
 
     // 配置数据格式
-    I2S0.conf.val = 0;
-    I2S0.conf.tx_right_first = 1;
-    I2S0.conf.tx_msb_right = 1;
-    I2S0.conf.tx_dma_equal = 1;
-    I2S0.conf.rx_right_first = 1;
-    I2S0.conf.rx_msb_right = 1;
+    I2S0.conf.rx_start = 0;
+    I2S0.conf.rx_reset = 1;
+    I2S0.conf.rx_reset = 0;
+    I2S0.conf.rx_fifo_reset = 1;
+    I2S0.conf.rx_fifo_reset = 0;
+    I2S0.conf.rx_slave_mod = 1;
+    I2S0.conf.rx_right_first = 0;
+    I2S0.conf.rx_msb_right = 0;
+    I2S0.conf.rx_short_sync = 0;
+    I2S0.conf.rx_mono = 0;
+    I2S0.conf.rx_msb_shift = 0;
     I2S0.conf.rx_dma_equal = 1;
 
-    I2S0.conf1.val = 0;
-    I2S0.conf1.tx_pcm_bypass = 1;
-    I2S0.conf1.tx_stop_en = 1;
     I2S0.conf1.rx_pcm_bypass = 1;
 
-    I2S0.conf2.val = 0;
     I2S0.conf2.cam_sync_fifo_reset = 1;
     I2S0.conf2.cam_sync_fifo_reset = 0;
     I2S0.conf2.lcd_en = 1;
@@ -131,17 +128,11 @@ static void cam_config(cam_config_t *config)
     I2S0.conf2.i_v_sync_filter_en = 1;
     I2S0.conf2.i_v_sync_filter_thres = 1;
 
-    I2S0.conf_chan.val = 0;
-    I2S0.conf_chan.tx_chan_mod = 1;
     I2S0.conf_chan.rx_chan_mod = 1;
 
-    I2S0.fifo_conf.val = 0;
     I2S0.fifo_conf.rx_fifo_mod_force_en = 1;
     I2S0.fifo_conf.rx_data_num = 32;
-    I2S0.fifo_conf.rx_fifo_mod = 2;
-    I2S0.fifo_conf.tx_fifo_mod_force_en = 1;
-    I2S0.fifo_conf.tx_data_num = 32;
-    I2S0.fifo_conf.tx_fifo_mod = 2;
+    I2S0.fifo_conf.rx_fifo_mod = 1;
     I2S0.fifo_conf.dscr_en = 1;
 
     I2S0.lc_conf.out_rst  = 1;
@@ -149,12 +140,16 @@ static void cam_config(cam_config_t *config)
     I2S0.lc_conf.in_rst  = 1;
     I2S0.lc_conf.in_rst  = 0;
 
-    I2S0.timing.val = 0;
+    I2S0.lc_conf.in_rst  = 1;
+    I2S0.lc_conf.in_rst  = 0;
+    I2S0.lc_conf.ahbm_fifo_rst = 1;
+    I2S0.lc_conf.ahbm_fifo_rst = 0;
+    I2S0.lc_conf.ahbm_rst = 1;
+    I2S0.lc_conf.ahbm_rst = 0;
+    I2S0.lc_conf.check_owner = 0;
 
     I2S0.int_ena.val = 0;
     I2S0.int_clr.val = ~0;
-
-    I2S0.lc_conf.check_owner = 0;
     I2S0.conf.rx_start = 1;
 }
 
