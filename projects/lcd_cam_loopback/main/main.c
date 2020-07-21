@@ -61,7 +61,9 @@ static void cam_task(void *arg)
         .pin_rst = LCD_RST,
         .pin_bk = LCD_BK,
         .max_buffer_size = 2 * 1024,
-        .horizontal = 2 // 2: UP, 3： DOWN
+        .horizontal = 2, // 2: UP, 3： DOWN
+        .dis_invert = false,
+        .dis_bgr = false
     };
 
     lcd_init(&lcd_config);

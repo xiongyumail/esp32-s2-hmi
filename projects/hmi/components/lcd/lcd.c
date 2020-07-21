@@ -22,10 +22,10 @@ typedef struct {
     uint32_t dma_size;
     uint8_t horizontal;
     uint8_t dc_state;
-    uint8_t pin_dc;
-    uint8_t pin_cs;
-    uint8_t pin_rst;
-    uint8_t pin_bk;
+    int8_t pin_dc;
+    int8_t pin_cs;
+    int8_t pin_rst;
+    int8_t pin_bk;
     lldesc_t *dma;
     uint8_t *buffer;
     QueueHandle_t event_queue;
@@ -35,6 +35,9 @@ static lcd_obj_t *lcd_obj = NULL;
 
 void inline lcd_set_rst(uint8_t state)
 {
+    if (lcd_obj->pin_rst < 0) {
+        return;
+    }
     gpio_set_level(lcd_obj->pin_rst, state);
 }
 
@@ -50,6 +53,9 @@ void inline lcd_set_cs(uint8_t state)
 
 void inline lcd_set_blk(uint8_t state)
 {
+    if (lcd_obj->pin_bk < 0) {
+        return;
+    }
     gpio_set_level(lcd_obj->pin_bk, state);
 }
 
@@ -167,29 +173,31 @@ static void lcd_st7789_config(lcd_config_t *config)
 
     lcd_write_cmd(0x36); // MADCTL (36h): Memory Data Access Control
 
+    uint8_t bgr = (config->dis_bgr ? 0x08 : 0x0);
+
     switch (config->horizontal) {
         case 0: {
-            lcd_write_byte(0x00);
+            lcd_write_byte(0x00 | bgr);
         }
         break;
 
         case 1: {
-            lcd_write_byte(0xC0);
+            lcd_write_byte(0xC0 | bgr);
         }
         break;
 
         case 2: {
-            lcd_write_byte(0x70);
+            lcd_write_byte(0x70 | bgr);
         }
         break;
 
         case 3: {
-            lcd_write_byte(0xA0);
+            lcd_write_byte(0xA0 | bgr);
         }
         break;
 
         default: {
-            lcd_write_byte(0x00);
+            lcd_write_byte(0x00 | bgr);
         }
         break;
     }
@@ -261,7 +269,7 @@ static void lcd_st7789_config(lcd_config_t *config)
     lcd_write_byte(0x20);
     lcd_write_byte(0x23);
 
-    lcd_write_cmd(0x20); // INVON (21h): Display Inversion On
+    lcd_write_cmd(config->dis_invert ? 0x21 : 0x20); // INVON (21h): Display Inversion On
 
     lcd_write_cmd(0x11); // SLPOUT (11h): Sleep Out 
 
@@ -342,7 +350,9 @@ static void lcd_set_pin(lcd_config_t *config)
     gpio_config_t io_conf;
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
-    io_conf.pin_bit_mask = (1ULL << config->pin_dc) | (1ULL << config->pin_cs) | (1ULL << config->pin_rst) | (1ULL << config->pin_bk);
+    io_conf.pin_bit_mask = (1ULL << config->pin_dc) | (1ULL << config->pin_cs);
+    io_conf.pin_bit_mask |= (config->pin_rst < 0) ? 0ULL : (1ULL << config->pin_rst);
+    io_conf.pin_bit_mask |= (config->pin_bk < 0) ? 0ULL : (1ULL << config->pin_bk);
     io_conf.pull_down_en = 0;
     io_conf.pull_up_en = 0;
     gpio_config(&io_conf);
@@ -354,7 +364,7 @@ void lcd_dma_config(lcd_config_t *config)
     if (config->max_buffer_size >= LCD_DMA_MAX_SIZE * 2) {
         lcd_obj->dma_size = LCD_DMA_MAX_SIZE;
         for (cnt = 0;;cnt++) { // 寻找可以整除dma_size的buffer大小
-            if ((config->max_buffer_size - cnt) % lcd_obj->dma_size == 0) {
+            if ((config->max_buffer_size - cnt) % (lcd_obj->dma_size * 2) == 0) {
                 break;
             }
         }

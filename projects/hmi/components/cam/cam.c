@@ -238,6 +238,7 @@ static void cam_dma_stop(void)
 static void cam_dma_start(void)
 {
     if (I2S0.int_ena.in_suc_eof == 0) {
+        I2S0.conf.rx_start = 0;
         I2S0.int_clr.in_suc_eof = 1;
         I2S0.int_ena.in_suc_eof = 1;
         I2S0.conf.rx_reset = 1;

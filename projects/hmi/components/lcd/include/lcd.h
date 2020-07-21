@@ -9,14 +9,16 @@ extern "C" {
 
 typedef struct {
     uint32_t clk_fre;
-    uint8_t pin_clk;
-    uint8_t pin_mosi;
-    uint8_t pin_dc;
-    uint8_t pin_cs;
-    uint8_t pin_rst;
-    uint8_t pin_bk;
+    int8_t pin_clk;
+    int8_t pin_mosi;
+    int8_t pin_dc;
+    int8_t pin_cs;
+    int8_t pin_rst;
+    int8_t pin_bk;
     uint8_t horizontal;
     uint32_t max_buffer_size; // DMA used
+    uint8_t dis_invert;
+    uint8_t dis_bgr;
 } lcd_config_t;
 
 void lcd_rst();
