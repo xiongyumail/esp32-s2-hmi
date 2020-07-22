@@ -135,11 +135,6 @@ static void cam_config(cam_config_t *config)
     I2S0.fifo_conf.rx_fifo_mod = 1;
     I2S0.fifo_conf.dscr_en = 1;
 
-    I2S0.lc_conf.out_rst  = 1;
-    I2S0.lc_conf.out_rst  = 0;
-    I2S0.lc_conf.in_rst  = 1;
-    I2S0.lc_conf.in_rst  = 0;
-
     I2S0.lc_conf.in_rst  = 1;
     I2S0.lc_conf.in_rst  = 0;
     I2S0.lc_conf.ahbm_fifo_rst = 1;
