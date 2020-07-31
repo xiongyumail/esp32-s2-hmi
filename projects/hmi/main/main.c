@@ -197,6 +197,7 @@ static void cam_task(void *arg)
     cam_config_t cam_config = {
         .bit_width = 8,
         .mode.jpeg = false,
+        .mode.bit8 = false,
         .xclk_fre = 8 * 1000 * 1000,
         .pin = {
             .xclk  = CAM_XCLK,

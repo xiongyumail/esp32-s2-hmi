@@ -32,6 +32,7 @@ typedef struct {
     union {
         struct {
             uint32_t jpeg:   1; 
+            uint32_t bit8:   1; 
         };
         uint32_t val;
     } mode;

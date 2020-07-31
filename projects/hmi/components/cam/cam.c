@@ -157,7 +157,7 @@ static void cam_set_pin(cam_config_t *config)
     io_conf.pull_up_en = 1;
     io_conf.pull_down_en = 0;
     gpio_config(&io_conf);
-    gpio_install_isr_service(0);
+    gpio_install_isr_service(ESP_INTR_FLAG_LOWMED | ESP_INTR_FLAG_IRAM);
     gpio_isr_handler_add(config->pin.vsync, cam_vsync_isr, NULL);
     gpio_intr_disable(config->pin.vsync);
 
@@ -383,13 +383,14 @@ void cam_give(uint8_t *buffer)
 void cam_dma_config(cam_config_t *config) 
 {
     int cnt = 0;
+    uint32_t total_len = config->size.width * config->size.high * (config->mode.bit8 ? sizeof(uint8_t) : sizeof(uint16_t));
     if (config->mode.jpeg) {
-        cam_obj->buffer_size = 2048;
+        cam_obj->buffer_size = 8000;
         cam_obj->half_buffer_size = cam_obj->buffer_size / 2;
-        cam_obj->dma_size = 1024;
+        cam_obj->dma_size = 4000;
     } else {
         for (cnt = 0;;cnt++) { // 寻找可以整除的buffer大小
-            if ((config->size.width * config->size.high * 2) % (config->max_buffer_size - cnt) == 0) {
+            if (total_len % (config->max_buffer_size - cnt) == 0) {
                 break;
             }
         }
@@ -406,7 +407,7 @@ void cam_dma_config(cam_config_t *config)
 
     cam_obj->node_cnt = (cam_obj->buffer_size) / cam_obj->dma_size; // DMA节点个数
     cam_obj->half_node_cnt = cam_obj->node_cnt / 2;
-    cam_obj->total_cnt = (config->size.width * config->size.high * 2) / cam_obj->half_buffer_size; // 产生中断拷贝的次数, 乒乓拷贝
+    cam_obj->total_cnt = total_len / cam_obj->half_buffer_size; // 产生中断拷贝的次数, 乒乓拷贝
 
     ESP_LOGI(TAG, "cam_buffer_size: %d, cam_dma_size: %d, cam_dma_node_cnt: %d, cam_total_cnt: %d\n", cam_obj->buffer_size, cam_obj->dma_size, cam_obj->node_cnt, cam_obj->total_cnt);
 
@@ -476,7 +477,7 @@ int cam_init(const cam_config_t *config)
     } else {
         cam_obj->frame2_buffer_en = 0;
     }
-    esp_intr_alloc(ETS_I2S0_INTR_SOURCE, 0, cam_isr, NULL, &cam_obj->intr_handle);
+    esp_intr_alloc(ETS_I2S0_INTR_SOURCE, ESP_INTR_FLAG_LOWMED | ESP_INTR_FLAG_IRAM, cam_isr, NULL, &cam_obj->intr_handle);
     xTaskCreate(cam_task, "cam_task", config->task_stack, NULL, config->task_pri, &cam_obj->task_handle);
     return 0;
 }

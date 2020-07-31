@@ -424,7 +424,7 @@ const uint8_t ov2640_svga_init_reg_tbl[][2] = {
 };
 const uint8_t ov2640_yuv422_reg_tbl[][2] = {
     {0xFF, 0x00},
-    {0xDA, 0x10},
+    {0xDA, 0x00},
     {0xD7, 0x03},
     {0xDF, 0x00},
     {0x33, 0x80},
@@ -432,6 +432,7 @@ const uint8_t ov2640_yuv422_reg_tbl[][2] = {
     {0xe1, 0x77},
     {0x00, 0x00},
 };
+
 const uint8_t ov2640_jpeg_reg_tbl[][2] = {
     {0xff, 0x01},
     {0xe0, 0x14},
@@ -462,22 +463,6 @@ const uint8_t ov2640_rgb565_reg_tbl[][2] = {
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
