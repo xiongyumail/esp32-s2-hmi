@@ -66,13 +66,13 @@ void app_main()
 
     uint16_t *test_buf = (uint16_t *)heap_caps_malloc(sizeof(uint16_t) * 800 * 480, MALLOC_CAP_SPIRAM);
 
-    for (int x = 0; x < 800 * 480; x++) {
+    for (int x = 0; x < 320 * 480; x++) {
         test_buf[x] = 0xFFFF;
     }
 
     while (1) {
-        lcd_set_index(0, 0, 799, 479);
-        lcd_write_data((uint8_t *)test_buf, 800 * 480 * 2);
+        lcd_set_index(0, 0, 479, 319);
+        lcd_write_data((uint8_t *)test_buf, 320 * 480 * 2);
     }
 
 }

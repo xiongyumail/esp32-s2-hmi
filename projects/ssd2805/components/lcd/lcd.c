@@ -193,10 +193,10 @@ void gp_commad_pa(uint16_t pa)
 
 void dcs_packet_trans(void)
 {
-   ssd2805_write_reg(0xBD, 0x000B);
-   ssd2805_write_reg(0xBC, 0xb800);
-   ssd2805_write_reg(0xB7, 0x0151);
-   lcd_write_cmd(0x2c);
+    ssd2805_write_reg(0xBD, 0x0004);
+    ssd2805_write_reg(0xBC, 0xb000);
+    ssd2805_write_reg(0xB7, 0x0150);
+    lcd_write_cmd(0x2c);
 }
 
 void lcd_ssd2805_config(lcd_config_t *config)
@@ -215,135 +215,90 @@ void lcd_ssd2805_config(lcd_config_t *config)
 void lcd_config_lcm(lcd_config_t *config)
 {
     ssd2805_write_reg(0xB7,0x0210); //Generic Packet
-    lcd_delay_ms(120);
-    //************* Start Initial Sequence **********//
-    gp_commad_pa(4);
-    lcd_write_reg(0xFF); // EXTC Command Set enable register
-    lcd_write_reg(0xFF);
-    lcd_write_reg(0x98);
-    lcd_write_reg(0x06);
 
-    gp_commad_pa(2);
-    lcd_write_reg(0xBA); // SPI Interface Setting
-    lcd_write_reg(0x60);
-
-    gp_commad_pa(22);
-    lcd_write_reg(0xBC); // GIP 1
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x10);
-    lcd_write_reg(0x61);
-    lcd_write_reg(0x74);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x1B);
-    lcd_write_reg(0x12);
-    lcd_write_reg(0x71);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0xFF);
-    lcd_write_reg(0xF2);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x40);
-    gp_commad_pa(9);
-    lcd_write_reg(0xBD); // GIP 2
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x23);
-    lcd_write_reg(0x45);
-    lcd_write_reg(0x67);
-    lcd_write_reg(0x01);
-    lcd_write_reg(0x23);
-    lcd_write_reg(0x45);
-    lcd_write_reg(0x67);
-    gp_commad_pa(10);
-    lcd_write_reg(0xBE); // GIP 3
-    lcd_write_reg(0x01);
-
-    lcd_write_reg(0x22);
-    lcd_write_reg(0x22);
-    lcd_write_reg(0xBA);
-    lcd_write_reg(0xDC);
-    lcd_write_reg(0x26);
-    lcd_write_reg(0x28);
-    lcd_write_reg(0x22);
-    lcd_write_reg(0x22);
-    gp_commad_pa(4);
-    lcd_write_reg(0xED); // en_volt_reg measure VGMP
-    lcd_write_reg(0x7F);
-    lcd_write_reg(0x0F);
-    lcd_write_reg(0x00);
-    gp_commad_pa(4);
-    lcd_write_reg(0xC0); // Power Control 1
-    lcd_write_reg(0x03);
-    lcd_write_reg(0x0B);
-    lcd_write_reg(0x0A);
-    gp_commad_pa(4);
-    lcd_write_reg(0xB4); // Display Inversion Control
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x00);
-    gp_commad_pa(2);
-    lcd_write_reg(0xF7); // 480x800
-    lcd_write_reg(0x81);
-    gp_commad_pa(4);
-    lcd_write_reg(0xF2); //Panel Timing Control
-    lcd_write_reg(0x00);
-    lcd_write_reg(0x58);
-    lcd_write_reg(0x40);
-    gp_commad_pa(5);
-    lcd_write_reg(0xC1);
-    lcd_write_reg(0x17);
-    lcd_write_reg(0XA1);
-    lcd_write_reg(0x91);
-    lcd_write_reg(0x20);
-    gp_commad_pa(2);
-    lcd_write_reg(0XC7);
-
-    lcd_write_reg(0x97);
-    gp_commad_pa(17);
-    lcd_write_reg(0xE0);
-    lcd_write_reg(0x05); //P1
-    lcd_write_reg(0x11); //P2
-    lcd_write_reg(0x16); //P3
-    lcd_write_reg(0x0B); //P4
-    lcd_write_reg(0x0D); //P5
-    lcd_write_reg(0x09); //P6
-    lcd_write_reg(0XC7); //P7
-    lcd_write_reg(0x04); //P8
-    lcd_write_reg(0x08); //P9
-    lcd_write_reg(0x08); //P10
-    lcd_write_reg(0x11); //P11
-    lcd_write_reg(0x0F); //P12
-    lcd_write_reg(0x0F); //P13
-    lcd_write_reg(0x17); //P14
-    lcd_write_reg(0x14); //P15
-    lcd_write_reg(0x10); //P16
-    gp_commad_pa(17);
-    lcd_write_reg(0xE1);
-    lcd_write_reg(0x05); //P1
-    lcd_write_reg(0x07); //P2
-    lcd_write_reg(0x0E); //P3
-    lcd_write_reg(0x0A); //P4
-    lcd_write_reg(0x0D); //P5
-    lcd_write_reg(0x09); //P6
-    lcd_write_reg(0x76); //P7
-    lcd_write_reg(0x05); //P8
-    lcd_write_reg(0x08); //P9
-    lcd_write_reg(0x0C); //P10
-    lcd_write_reg(0x0F); //P11
-    lcd_write_reg(0x0D); //P12
-    lcd_write_reg(0x0B); //P13
-    lcd_write_reg(0x17); //P14
-    lcd_write_reg(0x11); //P15
-    lcd_write_reg(0x10); //P16
     gp_commad_pa(1);
-    lcd_write_reg(0x35); //Tearing Effect Line
+    lcd_write_reg(0x11); // Sleep Out
+    lcd_delay_ms(120);
+    gp_commad_pa(2);
+    lcd_write_reg(0xf0) ;
+    lcd_write_reg(0xc3) ;
+    gp_commad_pa(2);
+    lcd_write_reg(0xf0) ;
+    lcd_write_reg(0x96) ;
+    gp_commad_pa(2);
+    lcd_write_reg(0x36);
+    lcd_write_reg(0x48);
+    gp_commad_pa(2);
+    lcd_write_reg(0x3A);
+    lcd_write_reg(0x77);
+    gp_commad_pa(2);
+    lcd_write_reg(0xB4);
+    lcd_write_reg(0x01);
+    gp_commad_pa(2);
+    lcd_write_reg(0xB7) ;
+    lcd_write_reg(0xC6) ;
 
+    gp_commad_pa(9);
+    lcd_write_reg(0xe8);
+    lcd_write_reg(0x40);
+    lcd_write_reg(0x8a);
+    lcd_write_reg(0x00);
+    lcd_write_reg(0x00);
+    lcd_write_reg(0x29);
+    lcd_write_reg(0x19);
+    lcd_write_reg(0xa5);
+    lcd_write_reg(0x33);
+    gp_commad_pa(2);
+    lcd_write_reg(0xc1);
+    lcd_write_reg(0x06);
+    gp_commad_pa(2);
+    lcd_write_reg(0xc2);
+    lcd_write_reg(0xa7);
+    gp_commad_pa(2);
+    lcd_write_reg(0xc5);
+    lcd_write_reg(0x18);
+    gp_commad_pa(15);
+    lcd_write_reg(0xe0); //Positive Voltage Gamma Control
+    lcd_write_reg(0xf0);
+    lcd_write_reg(0x09);
+    lcd_write_reg(0x0b);
+    lcd_write_reg(0x06);
+    lcd_write_reg(0x04);
+    lcd_write_reg(0x15);
+    lcd_write_reg(0x2f);
+    lcd_write_reg(0x54);
+    lcd_write_reg(0x42);
+    lcd_write_reg(0x3c);
+    lcd_write_reg(0x17);
+    lcd_write_reg(0x14);
+    lcd_write_reg(0x18);
+    lcd_write_reg(0x1b);
+
+    gp_commad_pa(15);
+    lcd_write_reg(0xe1); //Negative Voltage Gamma Control
+    lcd_write_reg(0xf0);
+    lcd_write_reg(0x09);
+    lcd_write_reg(0x0b);
+    lcd_write_reg(0x06);
+    lcd_write_reg(0x04);
+    lcd_write_reg(0x03);
+    lcd_write_reg(0x2d);
+    lcd_write_reg(0x43);
+    lcd_write_reg(0x42);
+    lcd_write_reg(0x3b);
+    lcd_write_reg(0x16);
+    lcd_write_reg(0x14);
+    lcd_write_reg(0x17);
+    lcd_write_reg(0x1b);
+    gp_commad_pa(2);
+    lcd_write_reg(0xf0);
+    lcd_write_reg(0x3c);
+    gp_commad_pa(2);
+    lcd_write_reg(0xf0);
+    lcd_write_reg(0x69);
+    lcd_delay_ms(120);
+    gp_commad_pa(1);
+    lcd_write_reg(0x29); 
 
     // Reverse display
     ssd2805_write_reg(0xB7, 0x0250);
@@ -390,16 +345,15 @@ void lcd_set_index(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t 
 {
 	//ILI9481
     ssd2805_write_reg(0xB7,0x0210); //Generic Packet 
-    ssd2805_write_reg(0xBC,5);
-	lcd_write_cmd(0xbf);  
+    gp_commad_pa(5); 
 	lcd_write_reg(0x2a);   
 	lcd_write_reg(x_start >> 8);
 	lcd_write_reg(x_start & 0xff);
 	lcd_write_reg(x_end >> 8);
 	lcd_write_reg(x_end & 0xff);
-    ssd2805_write_reg(0xBC,5);
- 	lcd_write_cmd(0xbf);  
-	lcd_write_reg(0x2b);   
+    
+    gp_commad_pa(5);   
+    lcd_write_reg(0x2b);
 	lcd_write_reg(y_start >> 8);
 	lcd_write_reg(y_start & 0xff);
 	lcd_write_reg(y_end >> 8);
@@ -546,7 +500,7 @@ int lcd_init(lcd_config_t *config)
     lcd_delay_ms(100);
     lcd_ssd2805_config(config);
     lcd_config_lcm(config);
-    dcs_packet_trans();
+    // dcs_packet_trans();
 
     lcd_set_blk(0);
     ESP_LOGI(TAG, "lcd init ok\n");
